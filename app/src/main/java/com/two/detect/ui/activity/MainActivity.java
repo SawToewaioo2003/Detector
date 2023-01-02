@@ -32,7 +32,10 @@ public class MainActivity extends BaseActivity {
         drawView = new FaceView(MainActivity.this);
         drawView.textureView = mTextureView;
 		mainView.addView(drawView);
-		mTextureView.setSurfaceTextureListener(mSurfaceTextureListener);
+	    /*
+		mTextureView.setSurfaceTextureListener(mSurfaceTextureListener);*/
+		
+		
     }
 	boolean processing = false;
 	boolean task2=false;
