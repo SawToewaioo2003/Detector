@@ -21,10 +21,12 @@ import android.content.pm.PackageManager;
 import android.support.v4.app.ActivityCompat;
 import static android.Manifest.permission.CAMERA;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
-import android.support.design.widget.Snackbar;
 import android.widget.Button;
 import android.view.View;
 import android.content.Intent;
+import android.support.design.widget.Snackbar;
+import android.support.v7.app.AppCompatActivity;
+import android.widget.Toast;
 
 public class MainActivity extends BaseActivity { 
 
@@ -82,11 +84,10 @@ public class MainActivity extends BaseActivity {
 					//  boolean cameraAccepted = grantResults[1] == PackageManager.PERMISSION_GRANTED;
 
                     if (locationAccepted) {
-						Snackbar.make(findViewById(R.id.activitymainRelativeLayout1), "Permission Granted, Now you can access Camera..", Snackbar.LENGTH_LONG).show();
-
-						//handelIntent();
+						Toast.makeText(getApplicationContext(),"Permission Granted, Now you can access Camera..",Toast.LENGTH_LONG).show();
+						
 					} else {
-						Snackbar.make(findViewById(R.id.activitymainRelativeLayout1), "Permission Denied, Now you can't access Camera..", Snackbar.LENGTH_LONG).show();
+						Toast.makeText(getApplicationContext(),"Permission Denied, Now you can't access Camera..",Toast.LENGTH_LONG).show();
 						requestPermission();
 					}
 				}

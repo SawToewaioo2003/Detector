@@ -6,17 +6,13 @@ android {
 
     defaultConfig {
         applicationId "com.two.detect"
-        minSdkVersion 14
-        targetSdkVersion 23
+        minSdkVersion 21
+        targetSdkVersion 29
         versionCode 1
         versionName "1.0"
     }
     
-    lintOptions {
-        disable "InvalidPackage"
-        disable "MissingTranslation"
-   }
-
+   
     buildTypes {
         release {
             minifyEnabled false
