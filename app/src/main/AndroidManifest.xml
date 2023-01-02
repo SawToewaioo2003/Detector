@@ -26,8 +26,9 @@
             </intent-filter>
 
         </activity>
-
-        <activity android:name=".common.crash.CrashHandler$CrashActiviy"/>
+		<activity android:name=".common.crash.CrashHandler$CrashActiviy"/>
+        <activity android:name=".ui.activity.GreenDetect"/>
+		<activity android:name=".ui.activity.FaceDetect"/>
 
         <meta-data
             android:name="android.max_aspect"

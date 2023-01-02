@@ -5,10 +5,29 @@
 	android:layout_height="match_parent"
 	android:id="@+id/activitymainRelativeLayout1">
 
-	<com.two.detect.ui.activity.UI.AutoFitTextureView
-		android:id="@+id/texture"
+	<LinearLayout
+		android:orientation="vertical"
 		android:layout_width="match_parent"
-		android:layout_height="match_parent"/>
+		android:layout_height="match_parent"
+		android:gravity="center">
+
+		<Button
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="Green Detect"
+			android:background="#FF38FF00"
+			android:layout_margin="5dp"
+			android:id="@+id/activitymainButton1"/>
+
+		<Button
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="Face Detect"
+			android:background="#FFFEFD00"
+			android:layout_margin="5dp"
+			android:id="@+id/activitymainButton2"/>
+
+	</LinearLayout>
 
 </RelativeLayout>
 

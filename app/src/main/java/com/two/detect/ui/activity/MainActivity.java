@@ -16,164 +16,92 @@ import com.two.detect.ui.activity.Detect.DetectTask;
 import android.os.Looper;
 import com.two.detect.ui.activity.Detect.DetectFaceTask;
 import com.two.detect.ui.activity.Detect.FaceView;
+import android.support.v4.content.ContextCompat;
+import android.content.pm.PackageManager;
+import android.support.v4.app.ActivityCompat;
+import static android.Manifest.permission.CAMERA;
+import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
+import android.support.design.widget.Snackbar;
+import android.widget.Button;
+import android.view.View;
+import android.content.Intent;
 
 public class MainActivity extends BaseActivity { 
-	private AutoFitTextureView mTextureView;
-    private RelativeLayout mainView;
-    CameraView cameraView;
-    FaceView drawView;
+
+	private static final int PERMISSION_REQUEST_CODE = 200;
+	Button greendetect,facedetect;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mTextureView =findViewById(R.id.texture);
-		mainView=findViewById(R.id.activitymainRelativeLayout1);
-        cameraView = new CameraView(MainActivity.this, mTextureView);
-        drawView = new FaceView(MainActivity.this);
-        drawView.textureView = mTextureView;
-		mainView.addView(drawView);
-	    /*
-		mTextureView.setSurfaceTextureListener(mSurfaceTextureListener);*/
-		
-		
-    }
-	boolean processing = false;
-	boolean task2=false;
-	boolean task3=false;
-	boolean task4=false;
-	boolean task5=false;
-    private TextureView.SurfaceTextureListener mSurfaceTextureListener
-	= new TextureView.SurfaceTextureListener() {
+		greendetect = findViewById(R.id.activitymainButton1);
+		facedetect = findViewById(R.id.activitymainButton2);
+		greendetect.setOnClickListener(new View.OnClickListener(){
 
-        @Override
-        public void onSurfaceTextureAvailable(SurfaceTexture surfaceTexture,
-                                              int width, int height) {
-            cameraView.openCamera(width, height);
-        }
-
-        @Override
-        public void onSurfaceTextureSizeChanged(SurfaceTexture surfaceTexture,
-                                                int width, int height) {
-            cameraView.configureTransform(width, height);
-        }
-
-        @Override
-        public boolean onSurfaceTextureDestroyed(SurfaceTexture surfaceTexture) {
-            return true;
-        }
-
-        @Override
-        public void onSurfaceTextureUpdated(SurfaceTexture surfaceTexture) {
-           if (processing&task2&task3&task4&task5) {
-                return;
-            }else{
-				Bitmap photo = mTextureView.getBitmap(mTextureView.getWidth(), mTextureView.getHeight()).copy(Bitmap.Config.RGB_565, true); 
-
-				
-				if(!processing){
-					processing=true;
-					Thread t=new Thread(new DetectFaceTask(photo, new DetectFaceTask.ImageResponse(){
-
-												@Override
-												public void processFinished() {
-													processing=false;
-
-												}
-											}, drawView));
-
-					t.start();
+				@Override
+				public void onClick(View p1) {
+					if (checkPermission()) {
+						Intent i=new Intent(getApplicationContext(), GreenDetect.class);
+						startActivity(i);
+					} else {
+						requestPermission();
+					}
 				}
-				if(!task2){
-					task2=true;
-					Thread t=new Thread(new DetectFaceTask(photo, new DetectFaceTask.ImageResponse(){
 
-												@Override
-												public void processFinished() {
-													task2=false;
 
-												}
-											}, drawView));
+			});
+		facedetect.setOnClickListener(new View.OnClickListener(){
 
-					t.start();
+				@Override
+				public void onClick(View p1) {
+					if (checkPermission()) {
+						Intent i=new Intent(getApplicationContext(), FaceDetect.class);
+						startActivity(i);
+					} else {
+						requestPermission();
+					}
 				}
-				if(!task3){
-					task3=true;
-					Thread t=new Thread(new DetectFaceTask(photo, new DetectFaceTask.ImageResponse(){
 
-												@Override
-												public void processFinished() {
-													task3=false;
 
-												}
-											}, drawView));
+			});
 
-					t.start();
-				}
-				
-				if(!task4){
-					task4=true;
-					Thread t=new Thread(new DetectFaceTask(photo, new DetectFaceTask.ImageResponse(){
-
-												@Override
-												public void processFinished() {
-													task4=false;
-
-												}
-											}, drawView));
-
-					t.start();
-				}
-				if(!task5){
-					task5=true;
-					Thread t=new Thread(new DetectFaceTask(photo, new DetectFaceTask.ImageResponse(){
-
-												@Override
-												public void processFinished() {
-													task5=false;
-
-												}
-											}, drawView));
-
-					t.start();
-				}
-			//Bitmap photo=mTextureView.getBitmap(mTextureView.getWidth()/10,mTextureView.getHeight()/10);
-            
-		/*	Thread t=new Thread(new DetectTask(photo, new DetectTask.ImageResponse(){
-
-															 @Override
-															 public void processFinished() {
-																 processing=false;
-																 drawView.invalidate();
-															 }
-
-				
-			},drawView));
-			
-			t.start();
-			*/
-			
-			
-
-        }
+		if (!checkPermission()) {
+			requestPermission();
 		}
 
-    };
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        cameraView.startBackgroundThread();
-        if (mTextureView.isAvailable()) {
-            cameraView.openCamera(mTextureView.getWidth(), mTextureView.getHeight());
-        } else {
-            mTextureView.setSurfaceTextureListener(mSurfaceTextureListener);
-        }
     }
 
-    @Override
-    public void onPause() {
-        cameraView.closeCamera();
-        cameraView.stopBackgroundThread();
-        super.onPause();
+	@Override
+	public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+		super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+		switch (requestCode) {
+            case PERMISSION_REQUEST_CODE:
+                if (grantResults.length > 0) {
+
+                    boolean locationAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+					//  boolean cameraAccepted = grantResults[1] == PackageManager.PERMISSION_GRANTED;
+
+                    if (locationAccepted) {
+						Snackbar.make(findViewById(R.id.activitymainRelativeLayout1), "Permission Granted, Now you can access Camera..", Snackbar.LENGTH_LONG).show();
+
+						//handelIntent();
+					} else {
+						Snackbar.make(findViewById(R.id.activitymainRelativeLayout1), "Permission Denied, Now you can't access Camera..", Snackbar.LENGTH_LONG).show();
+						requestPermission();
+					}
+				}
+		}
+	}
+
+	private boolean checkPermission() {
+        int result = ContextCompat.checkSelfPermission(getApplicationContext(), CAMERA);
+		// int result1 = ContextCompat.checkSelfPermission(getApplicationContext(), WRITE_EXTERNAL_STORAGE);
+        return result == PackageManager.PERMISSION_GRANTED;//&& result1 == PackageManager.PERMISSION_GRANTED;
     }
+
+    private void requestPermission() {
+        ActivityCompat.requestPermissions(this, new String[]{CAMERA, WRITE_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE);
+
+    }
+
 }
