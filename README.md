@@ -1,3 +1,7 @@
-#GreenColor Detect
-#Face Detector
 
+
+AIDE PROJECT 
+============
+#GreenColor Detect
+
+#Face Detector
